@@ -11,7 +11,7 @@ namespace Warehouse;
 
 public static class WarehouseInstaller
 {
-    public static IServiceCollection InstallInventory(this IServiceCollection services, string inventoryConnectionString)
+    public static IServiceCollection WarehouseInstall(this IServiceCollection services, string inventoryConnectionString)
     {
         services.InstallRegisterAttribute(Assembly.GetExecutingAssembly());
         

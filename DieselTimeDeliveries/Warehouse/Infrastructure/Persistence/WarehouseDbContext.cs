@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Inventory.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 using Warehouse.Domain.Models;
@@ -20,6 +19,9 @@ public class WarehouseDbContext : DbContext {
     public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender) : base(options)
     {
         _sender = sender;
+    }
+    public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options)
+    {
     }
 
 
