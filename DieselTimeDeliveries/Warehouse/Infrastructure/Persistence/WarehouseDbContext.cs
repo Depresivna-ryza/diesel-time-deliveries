@@ -1,4 +1,5 @@
-﻿using Inventory.Domain.Common;
+﻿using System.Reflection;
+using Inventory.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 using Warehouse.Domain.Models;
@@ -24,8 +25,8 @@ public class WarehouseDbContext : DbContext {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         modelBuilder.Seed();
     }
 

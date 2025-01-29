@@ -1,6 +1,25 @@
-﻿namespace Warehouse.Infrastructure.Configurations;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Warehouse.Domain.Models.Package;
 
-public class PackageConfiguration
+namespace Warehouse.Infrastructure.Configurations;
+
+public class PackageConfiguration : IEntityTypeConfiguration<Package>
 {
-    
+    public void Configure(EntityTypeBuilder<Package> builder)
+    {
+        builder.HasKey(g => g.Id);
+        
+        builder.Property(g => g.Id)
+            .HasColumnName(nameof(PackageId))
+            .ValueGeneratedNever()
+            .HasConversion(
+                goodsId => goodsId.Value,
+                goods => PackageId.Create(goods)
+            );
+        
+        // perhaps missong this? idk ¯\_(ツ)_/¯
+        // builder.OwnsOne(g => g.Name);
+        // builder.OwnsOne(g => g.Amount);
+    }
 }
