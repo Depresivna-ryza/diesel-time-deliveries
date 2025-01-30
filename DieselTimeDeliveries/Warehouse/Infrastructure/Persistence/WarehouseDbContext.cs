@@ -18,12 +18,15 @@ public class WarehouseDbContext : DbContext {
 
     public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender) : base(options)
     {
-        Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Console.WriteLine("Message bus: " + (sender == null ? "null" : sender));
         _sender = sender;
     }
-
-
-
+    
+    // public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options)
+    // {
+    //     // _sender = sender;
+    // }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
