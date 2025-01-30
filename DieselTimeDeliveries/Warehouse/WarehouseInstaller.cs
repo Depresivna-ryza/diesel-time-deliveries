@@ -15,17 +15,11 @@ public static class WarehouseInstaller
     {
         services.InstallRegisterAttribute(Assembly.GetExecutingAssembly());
         
-        services.AddDbContext<WarehouseDbContext>(options =>
+        services.AddDbContextFactory<WarehouseDbContext>(options =>
         {
             options.UseNpgsql(inventoryConnectionString);
         });
         
         return services;
-    }
-    
-    public static void SeedInventory(WarehouseDbContext context)
-    {
-        
-        
     }
 }

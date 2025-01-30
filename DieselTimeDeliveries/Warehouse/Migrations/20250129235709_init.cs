@@ -47,6 +47,17 @@ namespace Warehouse.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Couriers",
+                column: "id",
+                values: new object[]
+                {
+                    new Guid("1dc985b2-11db-460a-9abf-06377d155038"),
+                    new Guid("1e92013d-158b-4774-81cf-d686c232cea2"),
+                    new Guid("914a8b83-0b83-484c-9c1c-173b6b0fe145"),
+                    new Guid("baffcf3b-0fec-4909-b69b-b21ab72d393d")
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Packages_CourierId",
                 table: "Packages",

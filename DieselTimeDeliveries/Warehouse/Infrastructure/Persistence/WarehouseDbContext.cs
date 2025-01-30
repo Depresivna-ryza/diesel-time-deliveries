@@ -14,15 +14,14 @@ public class WarehouseDbContext : DbContext {
     public DbSet<Package> Packages { get; set; } = null!;
     public DbSet<Courier> Couriers { get; set; } = null!;
 
-    public WarehouseDbContext() {    }
+    // public WarehouseDbContext() {    } ?????????????????
 
     public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender) : base(options)
     {
+        Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         _sender = sender;
     }
-    public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options)
-    {
-    }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
