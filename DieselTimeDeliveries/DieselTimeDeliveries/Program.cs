@@ -1,10 +1,15 @@
 using DieselTimeDeliveries;
+using DieselTimeDeliveries.ServiceDefaults;
+using Oakton.Resources;
 using Warehouse;
 using Warehouse.Application;
 using Wolverine;
 using Wolverine.Http;
 
 var builder = WebApplication.CreateBuilder(args);
+const string serviceName = "DieselTimeDeliveries";
+
+builder.AddServiceDefaults(serviceName);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -17,7 +22,12 @@ builder.Host.UseWolverine(opts =>
 
     // This *temporary* line of code will write out a full report about why or
     // why not Wolverine is finding this handler and its candidate handler messages
-    Console.WriteLine(opts.DescribeHandlerMatch(typeof(AddPackageHandler)));
+    // Console.WriteLine(opts.DescribeHandlerMatch(typeof(AddPackageHandler)));
+    
+    opts.ServiceName = serviceName;
+    opts.Policies.MessageSuccessLogLevel(LogLevel.Debug);
+    opts.Policies.LogMessageStarting(LogLevel.Information);
+    opts.Policies.MessageExecutionLogLevel(LogLevel.Information);
 });
 
 var dbConnectionString = Environment.GetEnvironmentVariable(EnvConstants.DbConnectionString);
@@ -44,5 +54,6 @@ app.UseSwagger();
 
 app.MapControllers();
 app.MapWolverineEndpoints();
+app.MapDefaultEndpoints();
 
 app.Run();

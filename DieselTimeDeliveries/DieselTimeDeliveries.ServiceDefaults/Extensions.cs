@@ -2,22 +2,23 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-
-namespace Microsoft.Extensions.Hosting
+namespace DieselTimeDeliveries.ServiceDefaults
 {
     // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
     // This project should be referenced by each service project in your solution.
     // To learn more about using this project, see https://aka.ms/dotnet/aspire/service-defaults
     public static class Extensions
     {
-        public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+        public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder, string serviceName) where TBuilder : IHostApplicationBuilder
         {
-            builder.ConfigureOpenTelemetry();
+            builder.ConfigureOpenTelemetry(serviceName);
 
             builder.AddDefaultHealthChecks();
 
@@ -41,12 +42,17 @@ namespace Microsoft.Extensions.Hosting
             return builder;
         }
 
-        public static TBuilder ConfigureOpenTelemetry<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+        public static TBuilder ConfigureOpenTelemetry<TBuilder>(this TBuilder builder, string serviceName) where TBuilder : IHostApplicationBuilder
         {
-            builder.Logging.AddOpenTelemetry(logging =>
+
+            builder.Logging.AddOpenTelemetry(options =>
             {
-                logging.IncludeFormattedMessage = true;
-                logging.IncludeScopes = true;
+                options
+                    .SetResourceBuilder(
+                        ResourceBuilder.CreateDefault()
+                            .AddService(serviceName));
+                options.IncludeFormattedMessage = true;
+                options.IncludeScopes = true;
             });
 
             builder.Services.AddOpenTelemetry()
@@ -54,6 +60,7 @@ namespace Microsoft.Extensions.Hosting
                 {
                     metrics.AddAspNetCoreInstrumentation()
                         .AddHttpClientInstrumentation()
+                        .AddMeter($"Wolverine:{serviceName}")
                         .AddRuntimeInstrumentation();
                 })
                 .WithTracing(tracing =>
@@ -62,6 +69,9 @@ namespace Microsoft.Extensions.Hosting
                         .AddAspNetCoreInstrumentation()
                         // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
                         //.AddGrpcClientInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation()
+                        .AddSource("Wolverine")
+                        
                         .AddHttpClientInstrumentation();
                 });
 

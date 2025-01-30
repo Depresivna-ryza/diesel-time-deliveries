@@ -22,6 +22,7 @@ public class AddPackageHandler(IRepository<Package> _repository)
         
         var addedGoods = await _repository.InsertAsync(goods.Value);
         await _repository.CommitAsync();
+        await Task.Delay(1000);
         
         return new AddPackageCommand.Result(
             new(
