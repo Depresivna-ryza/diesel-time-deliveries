@@ -16,8 +16,7 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5224",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "POSTGRES_CONNECTION_STRING": "Host=localhost;Port=5432;Database=DTD;Username=postgres;Password=postgres"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "https": {

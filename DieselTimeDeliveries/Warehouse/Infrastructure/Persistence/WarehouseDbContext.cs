@@ -1,6 +1,9 @@
 ﻿using System.Reflection;
+using JasperFx.Core;
+using Marten;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
+using SharedKernel.Interfaces;
 using Warehouse.Domain.Models;
 using Warehouse.Domain.Models.Package;
 using Wolverine;
@@ -10,22 +13,19 @@ namespace Warehouse.Infrastructure.Persistence;
 public class WarehouseDbContext : DbContext {
     
     private readonly IMessageBus _sender;
+    private readonly IDocumentStore _store;
     
     public DbSet<Package> Packages { get; set; } = null!;
     public DbSet<Courier> Couriers { get; set; } = null!;
 
     // public WarehouseDbContext() {    } ?????????????????
 
-    public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender) : base(options)
+    public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender, IDocumentStore store) : base(options)
     {
         Console.WriteLine("Message bus: " + (sender == null ? "null" : sender));
         _sender = sender;
+        _store = store;
     }
-    
-    // public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options) : base(options)
-    // {
-    //     // _sender = sender;
-    // }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -57,14 +57,16 @@ public class WarehouseDbContext : DbContext {
                 
                 return events;
             }).ToList();
+        
+        var integrationEvents = domainEvents
+            .Map(e => e.MapToIntegrationEvent())
+            .Select(e => e!)
+            .ToList();
 
-        foreach (var domainEvent in domainEvents)
+        foreach (var integrationEvent in integrationEvents)
         {
-            await _sender.PublishAsync(domainEvent);
-
-            var integrationEvent = domainEvent.MapToIntegrationEvent();
-            if (integrationEvent is not null)
-                await _sender.PublishAsync(integrationEvent);
+            await _sender.PublishAsync(integrationEvent);
         }
+        await _store.BulkInsertDocumentsAsync(integrationEvents);
     }
 }

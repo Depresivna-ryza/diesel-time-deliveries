@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using SharedKernel;
 using ErrorOr;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Warehouse.Domain.Events;
 
 namespace Warehouse.Domain.Models.Package;
 
@@ -30,5 +32,10 @@ public class Package : AggregateRoot<PackageId>
             Destination = "Destination",
             CourierId = Guid.Parse("1dc985b2-11db-460a-9abf-06377d155038")
         };
+    }
+
+    public void PackageAdded()
+    {
+        RaiseEvent(new PackageDomainEvent(Id.Value));
     }
 }

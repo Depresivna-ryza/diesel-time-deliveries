@@ -1,8 +1,11 @@
-﻿using SharedKernel.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RegistR.Attributes.Base;
+using SharedKernel;
+using SharedKernel.Interfaces;
 
 namespace Warehouse.Domain.Events;
 
 public class PackageIntegrationEvent : IIntegrationEvent
 {
-    
+    public Guid Id { get; set; }
 }
