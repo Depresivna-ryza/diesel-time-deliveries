@@ -6,13 +6,13 @@ using ErrorOr;
 
 namespace Warehouse.Api;
 
-public record Request(string Name, decimal Weight, string Destination);
+public record AddPackageRequest(string Name, decimal Weight, string Destination);
 
 public class AddPackageEndpoint
 {
     [Tags("Warehouse - Package")]
     [WolverinePost("/addPackage")]
-    public static async Task<IResult> AddPackagesAsync(Request request, IMessageBus sender)
+    public static async Task<IResult> AddPackagesAsync(AddPackageRequest request, IMessageBus sender)
     {
         var command = new AddPackageCommand(request.Name, request.Weight, request.Destination);
 
@@ -20,7 +20,7 @@ public class AddPackageEndpoint
 
         return result.Match(
             value => Results.Ok(
-                new Response(
+                new AddPackageResponse(
                     new(
                         value.Package.Id,
                         value.Package.Name
@@ -32,7 +32,7 @@ public class AddPackageEndpoint
     }
 }
 
-public record Response(Response.Item Goods)
+public record AddPackageResponse(AddPackageResponse.Item Goods)
 {
     public record Item(Guid Id, string Name);
 }
