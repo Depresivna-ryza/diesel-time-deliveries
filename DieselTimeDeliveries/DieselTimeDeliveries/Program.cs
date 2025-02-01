@@ -3,6 +3,8 @@ using DieselTimeDeliveries.ServiceDefaults;
 using Marten;
 using Oakton;
 using Oakton.Resources;
+using Routing;
+using Routing.Application;
 using Warehouse;
 using Warehouse.Application;
 using Wolverine;
@@ -40,7 +42,7 @@ builder.Host.UseWolverine(opts =>
 
     // This *temporary* line of code will write out a full report about why or
     // why not Wolverine is finding this handler and its candidate handler messages
-    // Console.WriteLine(opts.DescribeHandlerMatch(typeof(AddPackageHandler)));
+    Console.WriteLine(opts.DescribeHandlerMatch(typeof(RoutingHandler)));
 
     opts.Policies.UseDurableLocalQueues();
     opts.Policies.UseDurableInboxOnAllListeners();
@@ -53,15 +55,13 @@ builder.Host.UseWolverine(opts =>
     opts.Policies.MessageExecutionLogLevel(LogLevel.Information);
 });
 
-var dbConnectionString = builder.Configuration.GetConnectionString(EnvConstants.DbConnectionString);
-
-if (dbConnectionString == null)
-{
-    throw new Exception("Invalid connection string for postgres");
-}
+var dbConnectionString = builder.Configuration.GetConnectionString(EnvConstants.DbConnectionString) ?? throw new Exception("Invalid connection string for postgres");
 Console.WriteLine(dbConnectionString);
 Console.WriteLine("--------------------------");
 builder.Services.WarehouseInstall(dbConnectionString);
+
+var googleApiKey = builder.Configuration.GetConnectionString(EnvConstants.GoogleApiKey) ?? throw new Exception("Invalid google api key");
+builder.Services.RoutingInstall(googleApiKey);
 
 var app = builder.Build();
 

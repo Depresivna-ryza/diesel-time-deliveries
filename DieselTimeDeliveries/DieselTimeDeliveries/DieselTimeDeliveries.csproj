@@ -27,6 +27,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DieselTimeDeliveries.ServiceDefaults\DieselTimeDeliveries.ServiceDefaults.csproj" />
       <ProjectReference Include="..\Planning\Planning.csproj" />
+      <ProjectReference Include="..\Routing\Routing.csproj" />
       <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
       <ProjectReference Include="..\Warehouse\Warehouse.csproj" />
     </ItemGroup>

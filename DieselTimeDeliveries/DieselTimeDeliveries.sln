@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DieselTimeDeliveries.Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DieselTimeDeliveries.AppHost", "DieselTimeDeliveries.AppHost\DieselTimeDeliveries.AppHost.csproj", "{E2260BA6-A8B2-4458-9062-97198E0D2948}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routing", "Routing\Routing.csproj", "{31DCA461-4A92-4F4D-AE84-048A6E88E5F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{E2260BA6-A8B2-4458-9062-97198E0D2948}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2260BA6-A8B2-4458-9062-97198E0D2948}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2260BA6-A8B2-4458-9062-97198E0D2948}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31DCA461-4A92-4F4D-AE84-048A6E88E5F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31DCA461-4A92-4F4D-AE84-048A6E88E5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31DCA461-4A92-4F4D-AE84-048A6E88E5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31DCA461-4A92-4F4D-AE84-048A6E88E5F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,5 +60,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D9732E3F-CFC5-42FE-89B6-2C9131D66AEF} = {263EE789-438C-4EEB-9210-7E71EF6F159C}
 		{7E4B9A7A-6479-4F7E-9D1F-352B18FF59DB} = {263EE789-438C-4EEB-9210-7E71EF6F159C}
+		{31DCA461-4A92-4F4D-AE84-048A6E88E5F3} = {263EE789-438C-4EEB-9210-7E71EF6F159C}
 	EndGlobalSection
 EndGlobal
