@@ -9,32 +9,28 @@ namespace Warehouse.Domain.Models.Package;
 public class Package : AggregateRoot<PackageId>
 {
     public string Name { get; private set; }
-    public string Description { get; private set; }
-    public decimal Weight { get; private set; }
+    public Weight Weight { get; private set; }
     public string Destination { get; private set; }
-    public string Status { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
-    public Guid CourierId { get; private set; }
-    public Courier Courier { get; private set; }
+    public PackageStatusEnum Status { get; private set; }
 
-    public static ErrorOr<Package> Create(string name)
+    public static ErrorOr<Package> Create(string name, decimal weight, string destination)
     {
-        return new Package //example only
+        var weightOrError = Weight.Create(weight);
+        if (weightOrError.IsError)
         {
-            Id = PackageId.CreateUnique(),
-            Name = name,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-            Description = "hovno",
-            Status = "test",
-            Weight = 69,
-            Destination = "Destination",
-            CourierId = Guid.Parse("1dc985b2-11db-460a-9abf-06377d155038")
+            return weightOrError.Errors;
+        }
+
+        return new Package {
+            Id = PackageId.CreateUnique(), 
+            Name = name, 
+            Weight = weightOrError.Value, 
+            Destination = destination, 
+            Status = PackageStatusEnum.Stored
         };
     }
 
-    public void PackageAdded()
+    public void PackageAdded() //example only
     {
         RaiseEvent(new PackageDomainEvent(Id.Value));
     }

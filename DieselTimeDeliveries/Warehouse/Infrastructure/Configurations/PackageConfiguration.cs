@@ -18,6 +18,10 @@ public class PackageConfiguration : IEntityTypeConfiguration<Package>
                 goods => PackageId.Create(goods)
             );
         
+        // builder.OwnsOne(g => g.Name);
+        builder.OwnsOne(g => g.Weight);
+        // builder.OwnsOne(g => g.Destination);
+        
         // perhaps missong this? idk ¯\_(ツ)_/¯
         // builder.OwnsOne(g => g.Name);
         // builder.OwnsOne(g => g.Amount);

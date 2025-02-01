@@ -6,7 +6,7 @@ using ErrorOr;
 
 namespace Warehouse.Api;
 
-public record Request(string Name);
+public record Request(string Name, decimal Weight, string Destination);
 
 public class AddPackageEndpoint
 {
@@ -14,7 +14,7 @@ public class AddPackageEndpoint
     [WolverinePost("/addPackage")]
     public static async Task<IResult> AddPackagesAsync(Request request, IMessageBus sender)
     {
-        var command = new AddPackageCommand(request.Name);
+        var command = new AddPackageCommand(request.Name, request.Weight, request.Destination);
 
         var result = await sender.InvokeAsync<ErrorOr<AddPackageCommand.Result>>(command);
 
