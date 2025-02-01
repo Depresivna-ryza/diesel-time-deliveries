@@ -21,10 +21,11 @@ public class AddPackageEndpoint
         return result.Match(
             value => Results.Ok(
                 new AddPackageResponse(
-                    new(
-                        value.Package.Id,
-                        value.Package.Name
-                    )
+                    value.PackageId,
+                    value.Name,
+                    value.Weight,
+                    value.Destination,
+                    value.Status.ToString()
                 )
             ),
             errors => Results.BadRequest(errors.Select(e => e.Code))
@@ -32,7 +33,4 @@ public class AddPackageEndpoint
     }
 }
 
-public record AddPackageResponse(AddPackageResponse.Item Goods)
-{
-    public record Item(Guid Id, string Name);
-}
+public record AddPackageResponse(Guid PackageId, string Name, decimal Weight, string Destination, string Status);

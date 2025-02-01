@@ -6,12 +6,11 @@ using ErrorOr;
 
 public record AddPackageCommand(string Name, decimal Weight, string Destination)
 {
-    public record Result(AddedPackage Package);
+    public record Result(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
 
-    public record AddedPackage(Guid Id, string Name, decimal Weight, string Destination);
 }
 
-public class AddPackageHandler(IRepository<Package> _repository)
+public class AddPackageHandler(IRepository<Package> repository)
 {
     public async Task<ErrorOr<AddPackageCommand.Result>> HandleAsync(AddPackageCommand command)
     {
@@ -20,17 +19,16 @@ public class AddPackageHandler(IRepository<Package> _repository)
         if (goods.IsError)
             return goods.Errors;
         
-        var addedGoods = await _repository.InsertAsync(goods.Value);
+        var addedGoods = await repository.InsertAsync(goods.Value);
         addedGoods.PackageAdded();
         
-        await _repository.CommitAsync();
+        await repository.CommitAsync();
         return new AddPackageCommand.Result(
-            new(
-                addedGoods.Id.Value,
-                addedGoods.Name,
-                addedGoods.Weight.Value,
-                addedGoods.Destination
-            )
+            addedGoods.Id.Value,
+            addedGoods.Name,
+            addedGoods.Weight.Value,
+            addedGoods.Destination,
+            addedGoods.Status.ToString()
         );
     }
 }
