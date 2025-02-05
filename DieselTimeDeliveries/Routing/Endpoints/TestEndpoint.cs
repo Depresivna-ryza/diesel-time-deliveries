@@ -2,6 +2,7 @@
 using Routing.Application;
 using Wolverine;
 using ErrorOr;
+using Routing.Contracts.Commands;
 using Wolverine.Http;
 
 namespace Routing.Endpoints;
