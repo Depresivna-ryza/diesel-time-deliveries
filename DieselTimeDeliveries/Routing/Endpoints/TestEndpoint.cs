@@ -10,8 +10,8 @@ public record RouteRequest(List<string> Destinations, string origin);
 
 public class TestEndpoint //only for testing purposes
 {
-    // [Tags("Routing - Package")]
-    // [WolverinePost("/testroute")]
+    [Tags("Routing - Package")]
+    [WolverinePost("/testroute")]
     public static async Task<IResult> RoutePackagesAsync(RouteRequest routeRequest, IMessageBus sender)
     {
         var command = new RoutePackagesCommand(routeRequest.Destinations, routeRequest.origin);

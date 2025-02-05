@@ -32,7 +32,7 @@ public class RoutingHandler(IApiKeyProvider _apiKeyProvider)
         request.Intermediates = command.Destinations.Map(e => new RouteWayPoint { Address = e });
         request.Origin = new RouteWayPoint {Address = command.origin };
         request.Destination = new RouteWayPoint {Address = command.origin };
-        request.TravelMode = RouteTravelMode.Drive;
+        request.TravelMode = RouteTravelMode.Walk;
         request.OptimizeWaypointOrder = true;
         
         var res = await GoogleApi.GoogleMaps.Routes.RouteDirections.QueryAsync(request);
