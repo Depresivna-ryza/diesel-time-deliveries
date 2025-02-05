@@ -17,34 +17,36 @@ using Error = ErrorOr.Error;
 
 namespace Routing.Application;
 
+public record GetDirectionsCommand(string Origin, string Destination)
+{
+    public record Result(List<string> StepInstructions);
+}
 
 [WolverineHandler]
-public class RoutingHandler(IApiKeyProvider _apiKeyProvider)
+public class GetDirectionsHandler(IApiKeyProvider apiKeyProvider)
 {
-    public async Task<ErrorOr<RoutePackagesCommand.Result?>> HandleAsync(RoutePackagesCommand command)
+    public async Task<ErrorOr<GetDirectionsCommand.Result?>> HandleAsync(GetDirectionsCommand command)
     {
         RoutesDirectionsRequest request = new RoutesDirectionsRequest();
 
-        request.Key = _apiKeyProvider.Key;
-        request.Intermediates = command.Destinations.Map(e => new RouteWayPoint { Address = e });
-        request.Origin = new RouteWayPoint {Address = command.origin };
-        request.Destination = new RouteWayPoint {Address = command.origin };
+        request.Key = apiKeyProvider.Key;
+        request.Origin = new RouteWayPoint {Address = command.Origin };
+        request.Destination = new RouteWayPoint {Address = command.Destination };
         request.TravelMode = RouteTravelMode.Drive;
-        request.OptimizeWaypointOrder = true;
-        
+
         var res = await GoogleApi.GoogleMaps.Routes.RouteDirections.QueryAsync(request);
         
-        if (res == null || res.Error.Status != Status.Ok)
+        if (res == null )
         {
             return new Error();
         }
         
-        if (!res.Routes.Any())
+        if (!res.Routes.Any() || !res.Routes.GetFirst().Legs.Any())
         {
             return new Error();
         }
 
-        return new RoutePackagesCommand.Result(res.Routes.GetFirst()
-            .OptimizedIntermediateWaypointIndex.Map(e => command.Destinations[e]).ToList());
+        return new GetDirectionsCommand.Result(res.Routes.GetFirst().Legs.FirstOrDefault()?
+            .Steps.Map(e => e.NavigationInstruction.Instructions).ToList() ?? []);
     }
 }

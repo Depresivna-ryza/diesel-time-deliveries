@@ -14,4 +14,8 @@
       <PackageReference Include="WolverineFx.Http" Version="3.8.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

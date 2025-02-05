@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 const string serviceName = "DieselTimeDeliveries";
 
 builder.AddServiceDefaults(serviceName);
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddWolverineHttp();
