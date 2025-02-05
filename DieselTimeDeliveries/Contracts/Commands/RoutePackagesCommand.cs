@@ -1,4 +1,4 @@
-﻿namespace Routing.Contracts.Commands;
+﻿namespace Contracts.Commands;
 
 public record RoutePackagesCommand(List<string> Destinations, string origin)
 {

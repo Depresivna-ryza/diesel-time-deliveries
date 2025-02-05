@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Contracts.Commands;
+using Microsoft.AspNetCore.Http;
 using Routing.Application;
 using Wolverine;
 using ErrorOr;
-using Routing.Contracts.Commands;
 using Wolverine.Http;
 
 namespace Routing.Endpoints;
 
 public record RouteRequest(List<string> Destinations, string origin);
 
-public class TestEndpoint //only for testing purposes
+public class TestEndpointRoute //only for testing purposes
 {
-    [Tags("Routing - Package")]
-    [WolverinePost("/testroute")]
+    // [Tags("Routing - Package")]
+    // [WolverinePost("/testroute")]
     public static async Task<IResult> RoutePackagesAsync(RouteRequest routeRequest, IMessageBus sender)
     {
         var command = new RoutePackagesCommand(routeRequest.Destinations, routeRequest.origin);

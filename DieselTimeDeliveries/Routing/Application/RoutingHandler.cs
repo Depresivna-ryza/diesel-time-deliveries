@@ -1,4 +1,5 @@
-﻿using GoogleApi.Entities.Common;
+﻿using Contracts.Commands;
+using GoogleApi.Entities.Common;
 using GoogleApi.Entities.Maps.Common;
 using GoogleApi.Entities.Maps.Common.Enums;
 using GoogleApi.Entities.Maps.DistanceMatrix.Request;
@@ -12,7 +13,6 @@ using GoogleApi.Entities.Maps.Geocoding.Location.Request;
 using GoogleApi.Entities.Maps.Routes.Common;
 using GoogleApi.Entities.Maps.Routes.Common.Enums;
 using GoogleApi.Entities.Maps.Routes.Directions.Request;
-using Routing.Contracts.Commands;
 using Error = ErrorOr.Error;
 
 namespace Routing.Application;
