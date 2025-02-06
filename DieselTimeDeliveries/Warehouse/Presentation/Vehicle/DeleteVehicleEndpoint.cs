@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application.Vehicle;
 using Wolverine;
 using Wolverine.Http;
 using ErrorOr;
+using Warehouse.Application.EndpointHandlers.Vehicle;
 
 namespace Warehouse.Presentation.Vehicle;
 

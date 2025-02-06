@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Courier;
+namespace Warehouse.Application.EndpointHandlers.Courier;
 
 public record AddCourierCommand(string Name, string Email)
 {

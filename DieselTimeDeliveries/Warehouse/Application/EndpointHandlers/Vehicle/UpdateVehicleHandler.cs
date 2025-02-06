@@ -2,7 +2,7 @@
 using Warehouse.Domain.Models.Vehicle;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Vehicle;
+namespace Warehouse.Application.EndpointHandlers.Vehicle;
 
 public record UpdateVehicleCommand(Guid VehicleId, string? Make, string? Model, decimal? Weight, string? Vin, string? Status)
 {

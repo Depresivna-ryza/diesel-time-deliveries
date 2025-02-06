@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Vehicle;
+namespace Warehouse.Application.EndpointHandlers.Vehicle;
 
 public record AddVehicleCommand(string Make, string Model, decimal WeightLimit, string Vin)
 {

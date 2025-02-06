@@ -2,7 +2,7 @@
 using Warehouse.Domain.Models.Courier;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Courier;
+namespace Warehouse.Application.EndpointHandlers.Courier;
 
 public record UpdateCourierCommand(Guid CourierId, string? Name, string? Email, string? Status)
 {

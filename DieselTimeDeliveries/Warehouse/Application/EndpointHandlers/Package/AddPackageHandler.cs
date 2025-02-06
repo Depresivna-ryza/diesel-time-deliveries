@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Package;
+namespace Warehouse.Application.EndpointHandlers.Package;
 
 public record AddPackageCommand(string Name, decimal Weight, string Destination)
 {

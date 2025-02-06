@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application.Courier;
 using Wolverine;
 using Wolverine.Http;
 using ErrorOr;
+using Warehouse.Application.EndpointHandlers.Courier;
 
 namespace Warehouse.Presentation.Courier;
 

@@ -2,7 +2,7 @@
 using Warehouse.Domain.Models.Package;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Package;
+namespace Warehouse.Application.EndpointHandlers.Package;
 
 public record DeletePackageCommand(Guid PackageId)
 {

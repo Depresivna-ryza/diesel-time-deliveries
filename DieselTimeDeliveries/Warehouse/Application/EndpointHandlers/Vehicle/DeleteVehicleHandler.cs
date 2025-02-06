@@ -2,7 +2,7 @@
 using Warehouse.Domain.Models.Vehicle;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Vehicle;
+namespace Warehouse.Application.EndpointHandlers.Vehicle;
 
 public record DeleteVehicleCommand(Guid VehicleId)
 {

@@ -2,7 +2,7 @@
 using Warehouse.Domain.Models.Package;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Package;
+namespace Warehouse.Application.EndpointHandlers.Package;
 
 public record UpdatePackageCommand(Guid PackageId, string? Name, decimal? Weight, string? Destination, string? Status)
 {

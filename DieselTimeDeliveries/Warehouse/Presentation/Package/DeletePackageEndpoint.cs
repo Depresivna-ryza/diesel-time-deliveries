@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application.Package;
 using Wolverine;
 using Wolverine.Http;
 using ErrorOr;
+using Warehouse.Application.EndpointHandlers.Package;
 
 namespace Warehouse.Presentation.Package;
 

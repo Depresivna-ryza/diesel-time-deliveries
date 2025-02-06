@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Http;
-using Warehouse.Application.Vehicle;
+using Warehouse.Application.EndpointHandlers.Vehicle;
 using Wolverine;
 using Wolverine.Http;
 

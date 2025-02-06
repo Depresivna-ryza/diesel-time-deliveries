@@ -2,7 +2,7 @@
 using Warehouse.Domain.Models.Courier;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application.Courier;
+namespace Warehouse.Application.EndpointHandlers.Courier;
 
 public record DeleteCourierCommand(Guid CourierId)
 {
