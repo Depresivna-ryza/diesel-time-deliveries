@@ -6,6 +6,11 @@ using ErrorOr;
 
 namespace Warehouse.Api;
 
+public record ListPackagesResponse(IEnumerable<ListPackagesResponse.Package> Packages)
+{
+    public record Package(Guid Id, string Name, decimal Weight, string Destination, string Status);
+}
+
 public class ListPackagesEndpoint
 {
     [Tags("Warehouse - Package")]
@@ -35,7 +40,3 @@ public class ListPackagesEndpoint
     }
 }
 
-public record ListPackagesResponse(IEnumerable<ListPackagesResponse.Package> Packages)
-{
-    public record Package(Guid Id, string Name, decimal Weight, string Destination, string Status);
-}

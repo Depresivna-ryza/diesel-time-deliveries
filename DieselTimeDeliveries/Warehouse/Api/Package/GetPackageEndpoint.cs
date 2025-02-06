@@ -6,6 +6,7 @@ using ErrorOr;
 
 namespace Warehouse.Api;
 
+public record GetPackageResponse(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
 public class GetPackageEndpoint
 {
     [Tags("Warehouse - Package")]
@@ -31,4 +32,3 @@ public class GetPackageEndpoint
     }
 }
 
-public record GetPackageResponse(Guid PackageId, string Name, decimal Weight, string Destination, string Status);

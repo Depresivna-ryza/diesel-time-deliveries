@@ -6,7 +6,10 @@ using ErrorOr;
 
 namespace Warehouse.Api;
 
-public record AddPackageRequest(string Name, decimal Weight, string Destination);
+public record AddPackageRequest(string Name, decimal Weight, string Destination)
+{
+    public record Response(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
+}
 
 public class AddPackageEndpoint
 {
@@ -20,7 +23,7 @@ public class AddPackageEndpoint
 
         return result.Match(
             value => Results.Ok(
-                new AddPackageResponse(
+                new AddPackageRequest.Response(
                     value.PackageId,
                     value.Name,
                     value.Weight,
@@ -33,4 +36,3 @@ public class AddPackageEndpoint
     }
 }
 
-public record AddPackageResponse(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
