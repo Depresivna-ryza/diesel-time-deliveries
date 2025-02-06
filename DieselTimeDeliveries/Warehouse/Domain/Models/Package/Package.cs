@@ -10,7 +10,7 @@ public class Package : AggregateRoot<PackageId>
     public string Name { get; private set; }
     public Weight Weight { get; private set; }
     public string Destination { get; private set; }
-    public PackageStatusEnum Status { get; set; }
+    public PackageStatusEnum Status { get; private set; }
     
     public DateTime? ProcessedAt { get; private set; }
     public DateTime? PickedForDeliveryAt { get; private set; }
@@ -32,6 +32,27 @@ public class Package : AggregateRoot<PackageId>
             Status = PackageStatusEnum.Stored
         };
     }
+    
+    public void UpdateStatus(PackageStatusEnum status)
+    {
+        Status = status;
+        
+        switch (Status)
+        {
+            case PackageStatusEnum.Stored:
+                ProcessedAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Inbound:
+                PickedForDeliveryAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Delivered:
+                DeliveredAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Discarded:
+                DiscardedAt = DateTime.Now.ToUniversalTime();
+                break;
+        }
+    }
 
     public ErrorOr<Success> Update(string? name, decimal? weight, string? destination, string? status)
     {
@@ -49,23 +70,7 @@ public class Package : AggregateRoot<PackageId>
         {
             if (!Enum.TryParse<PackageStatusEnum>(status, true, out var newStatus))
                 return Error.Validation("Invalid status");
-            Status = newStatus;
-        }
-        
-        switch (Status)
-        {
-            case PackageStatusEnum.Stored:
-                ProcessedAt = DateTime.Now.ToUniversalTime();
-                break;
-            case PackageStatusEnum.Inbound:
-                PickedForDeliveryAt = DateTime.Now.ToUniversalTime();
-                break;
-            case PackageStatusEnum.Delivered:
-                DeliveredAt = DateTime.Now.ToUniversalTime();
-                break;
-            case PackageStatusEnum.Discarded:
-                DiscardedAt = DateTime.Now.ToUniversalTime();
-                break;
+            UpdateStatus(newStatus);
         }
         
         return Result.Success;

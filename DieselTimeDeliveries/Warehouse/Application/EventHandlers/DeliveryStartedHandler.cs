@@ -36,7 +36,7 @@ public class DeliveryStartedHandler(
         
         foreach (var package in packages)
         {
-            package.Status = PackageStatusEnum.Inbound;
+            package.UpdateStatus(PackageStatusEnum.Inbound);
             repositoryPackage.Update(package);
         }
         

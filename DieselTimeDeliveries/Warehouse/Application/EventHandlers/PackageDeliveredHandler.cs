@@ -21,7 +21,7 @@ public class PackageDeliveredHandler(
 
         if (package is not null)
         {
-            package.Status = query.SuccessfulDelivery ? PackageStatusEnum.Delivered : PackageStatusEnum.Discarded;
+            package.UpdateStatus(query.SuccessfulDelivery ? PackageStatusEnum.Delivered : PackageStatusEnum.Discarded);
             repository.Update(package);
         }
     }
