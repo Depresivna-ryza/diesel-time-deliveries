@@ -1,3 +1,3 @@
 ﻿namespace Contracts.Events;
 
-public record PackageDeliveredEvent(Guid PackageId);
+public record PackageDeliveredEvent(Guid PackageId, bool SuccessfulDelivery = true);

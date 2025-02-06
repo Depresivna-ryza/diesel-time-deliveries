@@ -11,7 +11,7 @@ public class Vehicle : AggregateRoot<VehicleId>
     public Weight PackageWeightLimit { get; private set; }
 
     public Vin Vin { get; private set; }
-    public VehicleStatusEnum Status { get; private set; }
+    public VehicleStatusEnum Status { get; set; }
 
     public static ErrorOr<Vehicle> Create(string make, string model, decimal weightLimit, string vin)
     {

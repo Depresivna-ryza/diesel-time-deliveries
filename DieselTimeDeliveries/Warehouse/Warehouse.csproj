@@ -23,7 +23,6 @@
 
     <ItemGroup>
       <Folder Include="Application\EndpointHandlers\" />
-      <Folder Include="Application\EventHandlers\" />
     </ItemGroup>
 
 </Project>

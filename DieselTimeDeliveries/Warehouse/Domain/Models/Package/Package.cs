@@ -10,7 +10,7 @@ public class Package : AggregateRoot<PackageId>
     public string Name { get; private set; }
     public Weight Weight { get; private set; }
     public string Destination { get; private set; }
-    public PackageStatusEnum Status { get; private set; }
+    public PackageStatusEnum Status { get; set; }
     
     public DateTime? ProcessedAt { get; private set; }
     public DateTime? PickedForDeliveryAt { get; private set; }

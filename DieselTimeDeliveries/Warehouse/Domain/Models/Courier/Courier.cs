@@ -9,7 +9,7 @@ public class Courier : AggregateRoot<CourierId>
 
     public Email Email { get; private set; }
 
-    public CourierStatusEnum Status { get; private set; }
+    public CourierStatusEnum Status { get; set; }
 
     public static ErrorOr<Courier> Create(string name, string email)
     {
