@@ -39,6 +39,35 @@ public class Vehicle : AggregateRoot<VehicleId>
             Status = VehicleStatusEnum.Available
         };
     }
+    
+    public ErrorOr<Success> Update(string? make, string? model, decimal? weight, string? vin, string? status)
+    {
+        Make = make ?? Make;
+        Model = model ?? Model;
+        
+        if (weight.HasValue)
+        {
+            var weightOrError = Weight.Create(weight.Value);
+            if (weightOrError.IsError) return weightOrError.Errors;
+            PackageWeightLimit = weightOrError.Value;
+        }
+        
+        if (vin != null)
+        {
+            var vinOrError = Vin.Create(vin);
+            if (vinOrError.IsError) return vinOrError.Errors;
+            Vin = vinOrError.Value;
+        }
+        
+        if (status != null)
+        {
+            if (!Enum.TryParse<VehicleStatusEnum>(status, true, out var newStatus))
+                return Error.Validation("Invalid status");
+            Status = newStatus;
+        }
+        
+        return Result.Success;
+    }
 
     // public void VehicleAdded() 
     // {
