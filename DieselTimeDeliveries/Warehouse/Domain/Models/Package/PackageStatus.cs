@@ -4,14 +4,17 @@ namespace Warehouse.Domain.Models.Package;
 
 public class PackageStatus : ValueObject
 {
-    public PackageStatusEnum PackageStatusEnum { get; private set; }
-
     private PackageStatus(PackageStatusEnum packageStatusEnum)
     {
         PackageStatusEnum = packageStatusEnum;
     }
-    
-    public static PackageStatus Create(PackageStatusEnum packageStatusEnum) => new PackageStatus(packageStatusEnum);
+
+    public PackageStatusEnum PackageStatusEnum { get; }
+
+    public static PackageStatus Create(PackageStatusEnum packageStatusEnum)
+    {
+        return new PackageStatus(packageStatusEnum);
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
