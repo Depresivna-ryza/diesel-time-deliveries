@@ -6,7 +6,16 @@ namespace Warehouse.Application.EndpointHandlers.Package;
 
 public record UpdatePackageCommand(Guid PackageId, string? Name, decimal? Weight, string? Destination, string? Status)
 {
-    public record Result(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
+    public record Result(
+        Guid PackageId,
+        string Name,
+        decimal Weight,
+        string Destination,
+        string Status,
+        DateTime? ProcessedAt,
+        DateTime? PickedForDeliveryAt,
+        DateTime? DeliveredAt,
+        DateTime? DiscardedAt);
 }
 
 public class updatePackageHandler(IRepository<Domain.Models.Package.Package> repository, IQueryObject<Domain.Models.Package.Package> queryObject)
@@ -37,7 +46,11 @@ public class updatePackageHandler(IRepository<Domain.Models.Package.Package> rep
             updateedGoods.Name,
             updateedGoods.Weight.Value,
             updateedGoods.Destination,
-            updateedGoods.Status.ToString()
+            updateedGoods.Status.ToString(),
+            updateedGoods.ProcessedAt,
+            updateedGoods.PickedForDeliveryAt,
+            updateedGoods.DeliveredAt,
+            updateedGoods.DiscardedAt
         );
     }
 }

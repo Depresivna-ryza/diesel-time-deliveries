@@ -6,7 +6,16 @@ namespace Warehouse.Application.EndpointHandlers.Package;
 
 public record GetPackageQuery(Guid PackageId)
 {
-    public record Result(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
+    public record Result(
+        Guid PackageId,
+        string Name,
+        decimal Weight,
+        string Destination,
+        string Status,
+        DateTime? ProcessedAt,
+        DateTime? PickedForDeliveryAt,
+        DateTime? DeliveredAt,
+        DateTime? DiscardedAt);
 }
 
 public class GetPackageHandler(IQueryObject<Domain.Models.Package.Package> queryObject)
@@ -24,7 +33,11 @@ public class GetPackageHandler(IQueryObject<Domain.Models.Package.Package> query
             package.Name,
             package.Weight.Value,
             package.Destination,
-            package.Status.ToString()
+            package.Status.ToString(),
+            package.ProcessedAt,
+            package.PickedForDeliveryAt,
+            package.DeliveredAt,
+            package.DiscardedAt
         );
     }
 }

@@ -6,7 +6,16 @@ using Wolverine.Http;
 
 namespace Warehouse.Presentation.Package;
 
-public record GetPackageResponse(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
+public record GetPackageResponse(
+    Guid PackageId,
+    string Name,
+    decimal Weight,
+    string Destination,
+    string Status,
+    DateTime? ProcessedAt,
+    DateTime? PickedForDeliveryAt,
+    DateTime? DeliveredAt,
+    DateTime? DiscardedAt);
 
 public class GetPackageEndpoint
 {
@@ -25,7 +34,11 @@ public class GetPackageEndpoint
                     value.Name,
                     value.Weight,
                     value.Destination,
-                    value.Status
+                    value.Status,
+                    value.ProcessedAt,
+                    value.PickedForDeliveryAt,
+                    value.DeliveredAt,
+                    value.DiscardedAt
                 )
             ),
             errors => Results.BadRequest(errors.Select(e => e.Code))

@@ -5,7 +5,16 @@ namespace Warehouse.Application.EndpointHandlers.Package;
 
 public record AddPackageCommand(string Name, decimal Weight, string Destination)
 {
-    public record Result(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
+    public record Result(
+        Guid PackageId,
+        string Name,
+        decimal Weight,
+        string Destination,
+        string Status,
+        DateTime? ProcessedAt,
+        DateTime? PickedForDeliveryAt,
+        DateTime? DeliveredAt,
+        DateTime? DiscardedAt);
 }
 
 public class AddPackageHandler(IRepository<Domain.Models.Package.Package> repository)
@@ -26,7 +35,11 @@ public class AddPackageHandler(IRepository<Domain.Models.Package.Package> reposi
             addedGoods.Name,
             addedGoods.Weight.Value,
             addedGoods.Destination,
-            addedGoods.Status.ToString()
+            addedGoods.Status.ToString(),
+            addedGoods.ProcessedAt,
+            addedGoods.PickedForDeliveryAt,
+            addedGoods.DeliveredAt,
+            addedGoods.DiscardedAt
         );
     }
 }

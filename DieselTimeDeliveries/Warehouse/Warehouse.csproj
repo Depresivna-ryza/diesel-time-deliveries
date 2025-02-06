@@ -17,12 +17,13 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Contracts\Contracts.csproj" />
         <ProjectReference Include="..\SharedKernel\SharedKernel.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Presentation\Vehicle\"/>
-        <Folder Include="Application\Vehicle\"/>
+      <Folder Include="Application\EndpointHandlers\" />
+      <Folder Include="Application\EventHandlers\" />
     </ItemGroup>
 
 </Project>

@@ -8,7 +8,16 @@ namespace Warehouse.Presentation.Package;
 
 public record ListPackagesResponse(IEnumerable<ListPackagesResponse.Package> Packages)
 {
-    public record Package(Guid Id, string Name, decimal Weight, string Destination, string Status);
+    public record Package(
+        Guid PackageId,
+        string Name,
+        decimal Weight,
+        string Destination,
+        string Status,
+        DateTime? ProcessedAt,
+        DateTime? PickedForDeliveryAt,
+        DateTime? DeliveredAt,
+        DateTime? DiscardedAt);
 }
 
 public class ListPackagesEndpoint
@@ -30,7 +39,12 @@ public class ListPackagesEndpoint
                             o.Name,
                             o.Weight,
                             o.Destination,
-                            o.Status)
+                            o.Status,
+                            o.ProcessedAt,
+                            o.PickedForDeliveryAt,
+                            o.DeliveredAt,
+                            o.DiscardedAt
+                        )
                     )
                 )
             ),

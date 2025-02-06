@@ -8,7 +8,16 @@ namespace Warehouse.Presentation.Package;
 
 public record UpdatePackageRequest(Guid PackageId, string? Name, decimal? Weight, string? Destination, string? Status)
 {
-    public record Response(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
+    public record Response(
+        Guid PackageId,
+        string Name,
+        decimal Weight,
+        string Destination,
+        string Status,
+        DateTime? ProcessedAt,
+        DateTime? PickedForDeliveryAt,
+        DateTime? DeliveredAt,
+        DateTime? DiscardedAt);
 }
 
 public class UpdatePackageEndpoint
@@ -28,7 +37,11 @@ public class UpdatePackageEndpoint
                     value.Name,
                     value.Weight,
                     value.Destination,
-                    value.Status.ToString()
+                    value.Status.ToString(),
+                    value.ProcessedAt,
+                    value.PickedForDeliveryAt,
+                    value.DeliveredAt,
+                    value.DiscardedAt
                 )
             ),
             errors => Results.BadRequest(errors.Select(e => e.Code))

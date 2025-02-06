@@ -11,6 +11,11 @@ public class Package : AggregateRoot<PackageId>
     public Weight Weight { get; private set; }
     public string Destination { get; private set; }
     public PackageStatusEnum Status { get; private set; }
+    
+    public DateTime? ProcessedAt { get; private set; }
+    public DateTime? PickedForDeliveryAt { get; private set; }
+    public DateTime? DeliveredAt { get; private set; }
+    public DateTime? DiscardedAt { get; private set; }
 
     public static ErrorOr<Package> Create(string name, decimal weight, string destination)
     {
@@ -22,6 +27,7 @@ public class Package : AggregateRoot<PackageId>
             Id = PackageId.CreateUnique(),
             Name = name,
             Weight = weightOrError.Value,
+            ProcessedAt = DateTime.Now.ToUniversalTime(),
             Destination = destination,
             Status = PackageStatusEnum.Stored
         };
@@ -44,6 +50,22 @@ public class Package : AggregateRoot<PackageId>
             if (!Enum.TryParse<PackageStatusEnum>(status, true, out var newStatus))
                 return Error.Validation("Invalid status");
             Status = newStatus;
+        }
+        
+        switch (Status)
+        {
+            case PackageStatusEnum.Stored:
+                ProcessedAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Inbound:
+                PickedForDeliveryAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Delivered:
+                DeliveredAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Discarded:
+                DiscardedAt = DateTime.Now.ToUniversalTime();
+                break;
         }
         
         return Result.Success;
