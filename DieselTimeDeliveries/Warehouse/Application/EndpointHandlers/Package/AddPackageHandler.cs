@@ -27,7 +27,6 @@ public class AddPackageHandler(IRepository<Domain.Models.Package.Package> reposi
             return goods.Errors;
 
         var addedGoods = await repository.InsertAsync(goods.Value);
-        addedGoods.PackageAdded();
 
         await repository.CommitAsync();
         return new AddPackageCommand.Result(

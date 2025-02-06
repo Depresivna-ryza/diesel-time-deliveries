@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using SharedKernel;
-using Warehouse.Domain.Events;
 using Wolverine.Persistence;
 
 namespace Warehouse.Domain.Models.Package;
@@ -74,10 +73,5 @@ public class Package : AggregateRoot<PackageId>
         }
         
         return Result.Success;
-    }
-
-    public void PackageAdded()
-    {
-        RaiseEvent(new PackageDomainEvent(Id.Value));
     }
 }
