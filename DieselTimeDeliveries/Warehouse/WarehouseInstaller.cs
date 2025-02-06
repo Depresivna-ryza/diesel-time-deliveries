@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RegistR.Attributes.Extensions;
-using SharedKernel.Interfaces;
-using Warehouse.Domain.Events;
 using Warehouse.Infrastructure.Persistence;
 using Wolverine.Attributes;
 
@@ -13,14 +11,12 @@ namespace Warehouse;
 
 public static class WarehouseInstaller
 {
-    public static IServiceCollection WarehouseInstall(this IServiceCollection services, string inventoryConnectionString)
+    public static IServiceCollection WarehouseInstall(this IServiceCollection services,
+        string inventoryConnectionString)
     {
         services.InstallRegisterAttribute(Assembly.GetExecutingAssembly());
-        services.AddDbContextFactory<WarehouseDbContext>(options =>
-        {
-            options.UseNpgsql(inventoryConnectionString);
-        });
-        
+        services.AddDbContextFactory<WarehouseDbContext>(options => { options.UseNpgsql(inventoryConnectionString); });
+
         return services;
     }
 }

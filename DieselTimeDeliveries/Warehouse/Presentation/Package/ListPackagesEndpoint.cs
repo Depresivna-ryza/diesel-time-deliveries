@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
+using Warehouse.Application.Package;
 using Wolverine;
 using Wolverine.Http;
-using ErrorOr;
 
-namespace Warehouse.Api;
+namespace Warehouse.Presentation.Package;
 
 public record ListPackagesResponse(IEnumerable<ListPackagesResponse.Package> Packages)
 {
@@ -20,23 +20,21 @@ public class ListPackagesEndpoint
         var query = new ListPackagesQuery(page, pageSize);
 
         var result = await sender.InvokeAsync<ErrorOr<ListPackagesQuery.Result>>(query);
-        
+
         return result.Match(
             value => Results.Ok(
                 new ListPackagesResponse(
-                    value.Packages.Select(o => 
+                    value.Packages.Select(o =>
                         new ListPackagesResponse.Package(
-                            o.PackageId, 
-                            o.Name, 
-                            o.Weight, 
-                            o.Destination, 
+                            o.PackageId,
+                            o.Name,
+                            o.Weight,
+                            o.Destination,
                             o.Status)
                     )
                 )
             ),
             errors => Results.BadRequest(errors.Select(e => e.Code))
         );
-
     }
 }
-

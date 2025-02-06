@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
+using Warehouse.Application.Package;
 using Wolverine;
 using Wolverine.Http;
-using ErrorOr;
 
-namespace Warehouse.Api;
+namespace Warehouse.Presentation.Package;
 
 public record GetPackageResponse(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
+
 public class GetPackageEndpoint
 {
     [Tags("Warehouse - Package")]
@@ -31,4 +32,3 @@ public class GetPackageEndpoint
         );
     }
 }
-

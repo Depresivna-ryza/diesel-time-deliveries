@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
+using Warehouse.Application.Vehicle;
 using Wolverine;
 using Wolverine.Http;
-using ErrorOr;
-using Marten;
 
-namespace Warehouse.Api;
+namespace Warehouse.Presentation.Vehicle;
 
-public record GetVehicleResponse(Guid VehicleId, string Make, string Model, decimal WeightLimit, string Vin, string Status);
+public record GetVehicleResponse(
+    Guid VehicleId,
+    string Make,
+    string Model,
+    decimal WeightLimit,
+    string Vin,
+    string Status);
+
 public class GetVehicleEndpoint
 {
     [Tags("Warehouse - Vehicle")]
@@ -33,4 +39,3 @@ public class GetVehicleEndpoint
         );
     }
 }
-

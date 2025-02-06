@@ -1,20 +1,20 @@
-﻿using Warehouse.Domain.Models.Courier;
+﻿using ErrorOr;
+using Warehouse.Domain.Models.Courier;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application;
-using ErrorOr;
+namespace Warehouse.Application.Courier;
 
 public record GetCourierQuery(Guid CourierId)
-{ 
+{
     public record Result(Guid CourierId, string Name, string Email, string Status);
 }
 
-
-public class GetCourierHandler(IQueryObject<Courier> queryObject)
+public class GetCourierHandler(IQueryObject<Domain.Models.Courier.Courier> queryObject)
 {
     public async Task<ErrorOr<GetCourierQuery.Result>> Handle(GetCourierQuery query)
     {
-        var courier = (await queryObject.Filter(p => p.Id == CourierId.Create(query.CourierId)).ExecuteAsync()).SingleOrDefault();
+        var courier = (await queryObject.Filter(p => p.Id == CourierId.Create(query.CourierId)).ExecuteAsync())
+            .SingleOrDefault();
 
         if (courier is null)
             return Error.Validation($"Courier (id: {query.CourierId}) not found");

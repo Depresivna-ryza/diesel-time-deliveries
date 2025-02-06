@@ -2,18 +2,25 @@
 
 namespace Warehouse.Domain.Models.Courier;
 
-public class CourierId  : ValueObject
+public class CourierId : ValueObject
 {
-    public Guid Value { get; private set; }
-    
     private CourierId(Guid value)
     {
         Value = value;
     }
 
-    public static CourierId CreateUnique() => new CourierId(Guid.NewGuid());
-    public static CourierId Create(Guid value) => new CourierId(value);
-    
+    public Guid Value { get; }
+
+    public static CourierId CreateUnique()
+    {
+        return new CourierId(Guid.NewGuid());
+    }
+
+    public static CourierId Create(Guid value)
+    {
+        return new CourierId(value);
+    }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

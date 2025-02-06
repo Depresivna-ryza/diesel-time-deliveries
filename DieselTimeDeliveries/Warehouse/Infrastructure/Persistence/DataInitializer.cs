@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Warehouse.Domain.Models.Courier;
-using Warehouse.Domain.Models.Package;
-using Warehouse.Domain.Models.Vehicle;
 
 namespace Warehouse.Infrastructure.Persistence;
 
@@ -21,12 +18,11 @@ public static class DataInitializer
         //     Vehicle.Create("Skoda", "Octavia", 48.5m, "TT000TT").Value,
         //     Vehicle.Create("Volkswagen", "Golf", 50.0m, "KE123AB").Value
         // );
-        
+
         // modelBuilder.Entity<Package>().HasData(
         //     Package.Create("Package1", 10.5m, "Destination1").Value,
         //     Package.Create("Package2", 5.0m, "Destination2").Value,
         //     Package.Create("Package3", 7.25m, "Destination3").Value
         // );
-        
     }
 }

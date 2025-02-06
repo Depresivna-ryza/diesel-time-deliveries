@@ -1,20 +1,20 @@
-﻿using Warehouse.Domain.Models.Package;
+﻿using ErrorOr;
+using Warehouse.Domain.Models.Package;
 using Warehouse.Domain.Services;
 
-namespace Warehouse.Application;
-using ErrorOr;
+namespace Warehouse.Application.Package;
 
 public record GetPackageQuery(Guid PackageId)
-{ 
+{
     public record Result(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
 }
 
-
-public class GetPackageHandler(IQueryObject<Package> queryObject)
+public class GetPackageHandler(IQueryObject<Domain.Models.Package.Package> queryObject)
 {
     public async Task<ErrorOr<GetPackageQuery.Result>> Handle(GetPackageQuery query)
     {
-        var package = (await queryObject.Filter(p => p.Id == PackageId.Create(query.PackageId)).ExecuteAsync()).SingleOrDefault();
+        var package = (await queryObject.Filter(p => p.Id == PackageId.Create(query.PackageId)).ExecuteAsync())
+            .SingleOrDefault();
 
         if (package is null)
             return Error.Validation($"Package (id: {query.PackageId}) not found");

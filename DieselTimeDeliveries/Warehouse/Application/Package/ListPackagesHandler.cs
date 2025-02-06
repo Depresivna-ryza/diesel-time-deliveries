@@ -1,21 +1,21 @@
-﻿using Warehouse.Domain.Models.Package;
+﻿using ErrorOr;
 using Warehouse.Domain.Services;
-using ErrorOr;
 
-namespace Warehouse.Application;
+namespace Warehouse.Application.Package;
 
 public record ListPackagesQuery(int Page, int PageSize)
-{ 
+{
     public record Result(IEnumerable<Package> Packages);
+
     public record Package(Guid PackageId, string Name, decimal Weight, string Destination, string Status);
 }
 
-public class ListPackagesHandler(IQueryObject<Package> queryObject)
+public class ListPackagesHandler(IQueryObject<Domain.Models.Package.Package> queryObject)
 {
     public async Task<ErrorOr<ListPackagesQuery.Result>> Handle(ListPackagesQuery query)
     {
         var packages = await queryObject.Page(query.Page, query.PageSize).ExecuteAsync();
-        
+
         return new ListPackagesQuery.Result(
             packages.Select(p => new ListPackagesQuery.Package(
                 p.Id.Value,

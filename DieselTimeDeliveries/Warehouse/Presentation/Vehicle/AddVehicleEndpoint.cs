@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
+using Warehouse.Application.Vehicle;
 using Wolverine;
 using Wolverine.Http;
-using ErrorOr;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Warehouse.Api;
+namespace Warehouse.Presentation.Vehicle;
 
 public record AddVehicleRequest(string Make, string Model, decimal WeightLimit, string Vin)
 {
@@ -37,4 +36,3 @@ public class AddVehicleEndpoint
         );
     }
 }
-

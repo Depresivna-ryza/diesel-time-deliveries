@@ -3,8 +3,6 @@ using JasperFx.Core;
 using Marten;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
-using SharedKernel.Interfaces;
-using Warehouse.Domain.Models;
 using Warehouse.Domain.Models.Courier;
 using Warehouse.Domain.Models.Package;
 using Warehouse.Domain.Models.Vehicle;
@@ -12,24 +10,25 @@ using Wolverine;
 
 namespace Warehouse.Infrastructure.Persistence;
 
-public class WarehouseDbContext : DbContext {
-    
+public class WarehouseDbContext : DbContext
+{
     private readonly IMessageBus _sender;
     private readonly IDocumentStore _store;
-    
-    public DbSet<Package> Packages { get; set; } = null!;
-    public DbSet<Courier> Couriers { get; set; } = null!;
-    public DbSet<Vehicle> Vehicles { get; set; } = null!;
 
     // public WarehouseDbContext() {    } ?????????????????
 
-    public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender, IDocumentStore store) : base(options)
+    public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender, IDocumentStore store) :
+        base(options)
     {
         Console.WriteLine("Message bus: " + (sender == null ? "null" : sender));
         _sender = sender;
         _store = store;
     }
-    
+
+    public DbSet<Package> Packages { get; set; } = null!;
+    public DbSet<Courier> Couriers { get; set; } = null!;
+    public DbSet<Vehicle> Vehicles { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -38,15 +37,15 @@ public class WarehouseDbContext : DbContext {
     }
 
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         var result = await base.SaveChangesAsync(cancellationToken);
 
         await PublishEventsAsync();
-        
+
         return result;
     }
-    
+
     private async Task PublishEventsAsync()
     {
         var domainEvents = ChangeTracker.Entries<BaseEntity>()
@@ -55,21 +54,18 @@ public class WarehouseDbContext : DbContext {
             .SelectMany(e =>
             {
                 var events = e.DomainEvents;
-                
+
                 e.ClearEvents();
-                
+
                 return events;
             }).ToList();
-        
+
         var integrationEvents = domainEvents
             .Map(e => e.MapToIntegrationEvent())
             .Select(e => e!)
             .ToList();
 
-        foreach (var integrationEvent in integrationEvents)
-        {
-            await _sender.PublishAsync(integrationEvent);
-        }
+        foreach (var integrationEvent in integrationEvents) await _sender.PublishAsync(integrationEvent);
         await _store.BulkInsertDocumentsAsync(integrationEvents);
     }
 }

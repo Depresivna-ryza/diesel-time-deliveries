@@ -4,14 +4,17 @@ namespace Warehouse.Domain.Models.Vehicle;
 
 public class VehicleStatus : ValueObject
 {
-    public VehicleStatusEnum VehicleStatusEnum { get; private set; }
-
     private VehicleStatus(VehicleStatusEnum vehicleStatusEnum)
     {
         VehicleStatusEnum = vehicleStatusEnum;
     }
-    
-    public static VehicleStatus Create(VehicleStatusEnum vehicleStatusEnum) => new VehicleStatus(vehicleStatusEnum);
+
+    public VehicleStatusEnum VehicleStatusEnum { get; }
+
+    public static VehicleStatus Create(VehicleStatusEnum vehicleStatusEnum)
+    {
+        return new VehicleStatus(vehicleStatusEnum);
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

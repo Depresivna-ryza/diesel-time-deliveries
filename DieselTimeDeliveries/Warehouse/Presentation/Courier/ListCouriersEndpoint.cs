@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
+using Warehouse.Application.Courier;
 using Wolverine;
 using Wolverine.Http;
-using ErrorOr;
 
-namespace Warehouse.Api;
+namespace Warehouse.Presentation.Courier;
 
 public record ListCouriersResponse(IEnumerable<ListCouriersResponse.Courier> Couriers)
 {
@@ -20,14 +20,14 @@ public class ListCouriersEndpoint
         var query = new ListCouriersQuery(page, pageSize);
 
         var result = await sender.InvokeAsync<ErrorOr<ListCouriersQuery.Result>>(query);
-        
+
         return result.Match(
             value => Results.Ok(
                 new ListCouriersResponse(
-                    value.Couriers.Select(o => 
+                    value.Couriers.Select(o =>
                         new ListCouriersResponse.Courier(
-                            o.CourierId, 
-                            o.Name, 
+                            o.CourierId,
+                            o.Name,
                             o.Email,
                             o.Status)
                     )
@@ -35,6 +35,5 @@ public class ListCouriersEndpoint
             ),
             errors => Results.BadRequest(errors.Select(e => e.Code))
         );
-
     }
 }

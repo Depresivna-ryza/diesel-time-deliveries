@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
+using Warehouse.Application.Vehicle;
 using Wolverine;
 using Wolverine.Http;
-using ErrorOr;
 
-namespace Warehouse.Api;
+namespace Warehouse.Presentation.Vehicle;
 
 public record ListVehiclesResponse(IEnumerable<ListVehiclesResponse.Vehicle> Vehicles)
 {
@@ -20,13 +20,13 @@ public class ListVehicleEndpoint
         var query = new ListVehiclesQuery(page, pageSize);
 
         var result = await sender.InvokeAsync<ErrorOr<ListVehiclesQuery.Result>>(query);
-        
+
         return result.Match(
             value => Results.Ok(
                 new ListVehiclesResponse(
-                    value.Vehicles.Select(o => 
+                    value.Vehicles.Select(o =>
                         new ListVehiclesResponse.Vehicle(
-                            o.VehicleId, 
+                            o.VehicleId,
                             o.Make,
                             o.Model,
                             o.WeightLimit,
@@ -37,7 +37,5 @@ public class ListVehicleEndpoint
             ),
             errors => Results.BadRequest(errors.Select(e => e.Code))
         );
-
     }
 }
-

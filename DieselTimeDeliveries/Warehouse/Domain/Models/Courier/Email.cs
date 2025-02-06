@@ -1,26 +1,24 @@
-﻿using SharedKernel;
+﻿using System.ComponentModel.DataAnnotations;
 using ErrorOr;
-using System.ComponentModel.DataAnnotations;
+using SharedKernel;
 
 namespace Warehouse.Domain.Models.Courier;
 
 public class Email : ValueObject
 {
-    public string Value { get; set; }
-
     private Email(string value)
     {
         Value = value;
     }
 
+    public string Value { get; set; }
+
     public static ErrorOr<Email> Create(string value)
     {
-        if ( ! new EmailAddressAttribute().IsValid(value))
-        {
-            return Error.Validation("Email is not valid");
-        } 
+        if (!new EmailAddressAttribute().IsValid(value)) return Error.Validation("Email is not valid");
         return new Email(value);
     }
+
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return Value;

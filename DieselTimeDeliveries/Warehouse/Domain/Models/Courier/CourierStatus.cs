@@ -4,14 +4,17 @@ namespace Warehouse.Domain.Models.Courier;
 
 public class CourierStatus : ValueObject
 {
-    public CourierStatusEnum CourierStatusEnum { get; private set; }
-
     private CourierStatus(CourierStatusEnum courierStatusEnum)
     {
         CourierStatusEnum = courierStatusEnum;
     }
-    
-    public static CourierStatus Create(CourierStatusEnum courierStatusEnum) => new CourierStatus(courierStatusEnum);
+
+    public CourierStatusEnum CourierStatusEnum { get; }
+
+    public static CourierStatus Create(CourierStatusEnum courierStatusEnum)
+    {
+        return new CourierStatus(courierStatusEnum);
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

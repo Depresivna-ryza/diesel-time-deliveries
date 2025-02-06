@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using RegistR.Attributes.Base;
-using SharedKernel;
-using SharedKernel.Interfaces;
+﻿using SharedKernel.Interfaces;
 
 namespace Warehouse.Domain.Events;
 

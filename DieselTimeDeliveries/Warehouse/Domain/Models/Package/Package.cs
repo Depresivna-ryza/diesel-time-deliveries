@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using ErrorOr;
 using SharedKernel;
-using ErrorOr;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Warehouse.Domain.Events;
 
 namespace Warehouse.Domain.Models.Package;
@@ -16,21 +14,19 @@ public class Package : AggregateRoot<PackageId>
     public static ErrorOr<Package> Create(string name, decimal weight, string destination)
     {
         var weightOrError = Weight.Create(weight);
-        if (weightOrError.IsError)
-        {
-            return weightOrError.Errors;
-        }
+        if (weightOrError.IsError) return weightOrError.Errors;
 
-        return new Package {
-            Id = PackageId.CreateUnique(), 
-            Name = name, 
-            Weight = weightOrError.Value, 
-            Destination = destination, 
+        return new Package
+        {
+            Id = PackageId.CreateUnique(),
+            Name = name,
+            Weight = weightOrError.Value,
+            Destination = destination,
             Status = PackageStatusEnum.Stored
         };
     }
 
-    public void PackageAdded() 
+    public void PackageAdded()
     {
         RaiseEvent(new PackageDomainEvent(Id.Value));
     }

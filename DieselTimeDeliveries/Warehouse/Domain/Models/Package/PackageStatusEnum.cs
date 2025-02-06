@@ -5,5 +5,5 @@ public enum PackageStatusEnum
     Stored,
     Inbound,
     Delivered,
-    Discarded,
+    Discarded
 }

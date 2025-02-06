@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Warehouse.Application;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
+using Warehouse.Application.Courier;
 using Wolverine;
 using Wolverine.Http;
-using ErrorOr;
 
-namespace Warehouse.Api;
+namespace Warehouse.Presentation.Courier;
 
 public record AddCourierRequest(string Name, string Email)
 {
@@ -34,4 +34,3 @@ public class AddCourierEndpoint
         );
     }
 }
-
