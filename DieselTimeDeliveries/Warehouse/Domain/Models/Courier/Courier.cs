@@ -24,6 +24,27 @@ public class Courier : AggregateRoot<CourierId>
             Status = CourierStatusEnum.NotWorking
         };
     }
+    
+    public ErrorOr<Success> Update(string? name, string? email, string? status)
+    {
+        Name = name ?? Name;
+        
+        if (email != null)
+        {
+            var emailOrError = Email.Create(email);
+            if (emailOrError.IsError) return emailOrError.Errors;
+            Email = emailOrError.Value;
+        }
+        
+        if (status != null)
+        {
+            if (!Enum.TryParse<CourierStatusEnum>(status, true, out var newStatus))
+                return Error.Validation("Invalid status");
+            Status = newStatus;
+        }
+        
+        return Result.Success;
+    }
 
     // public void CourierAdded() 
     // {
