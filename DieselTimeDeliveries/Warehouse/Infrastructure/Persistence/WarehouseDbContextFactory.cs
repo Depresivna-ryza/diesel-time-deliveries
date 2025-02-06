@@ -18,6 +18,7 @@ public class WarehouseDbContextFactory: IDesignTimeDbContextFactory<WarehouseDbC
         }
         
         optionsBuilder.UseNpgsql(dbConnectionString);
+        optionsBuilder.EnableSensitiveDataLogging();
 
         return new WarehouseDbContext(optionsBuilder.Options, null, null);
     }

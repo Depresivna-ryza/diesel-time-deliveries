@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 using SharedKernel.Interfaces;
 using Warehouse.Domain.Models;
+using Warehouse.Domain.Models.Courier;
 using Warehouse.Domain.Models.Package;
+using Warehouse.Domain.Models.Vehicle;
 using Wolverine;
 
 namespace Warehouse.Infrastructure.Persistence;
@@ -17,6 +19,7 @@ public class WarehouseDbContext : DbContext {
     
     public DbSet<Package> Packages { get; set; } = null!;
     public DbSet<Courier> Couriers { get; set; } = null!;
+    public DbSet<Vehicle> Vehicles { get; set; } = null!;
 
     // public WarehouseDbContext() {    } ?????????????????
 

@@ -20,4 +20,9 @@
       <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Api\Vehicle\" />
+      <Folder Include="Application\Vehicle\" />
+    </ItemGroup>
+
 </Project>

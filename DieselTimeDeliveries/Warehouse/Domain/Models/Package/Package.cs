@@ -30,7 +30,7 @@ public class Package : AggregateRoot<PackageId>
         };
     }
 
-    public void PackageAdded() //example only
+    public void PackageAdded() 
     {
         RaiseEvent(new PackageDomainEvent(Id.Value));
     }
