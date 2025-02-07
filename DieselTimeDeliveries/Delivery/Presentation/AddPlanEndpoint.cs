@@ -1,6 +1,6 @@
 ﻿namespace Delivery.Api;
 
-public class AddPlanPackageEndpoint
+public class AddPlanEndpoint
 {
     
 }

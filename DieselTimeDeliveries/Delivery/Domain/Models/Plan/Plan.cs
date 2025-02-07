@@ -22,15 +22,14 @@ public class Plan : AggregateRoot<PlanId>
     public DateTime? StartedAt { get; private set; }
     public DateTime? EndedAt { get; private set; }
     
-    public static ErrorOr<Plan> Create(
-        Guid vehicleId, Guid courierId, List<Guid> packagesId)
+    public static ErrorOr<Plan> Create()
     {
         return new Plan
         {
-            //TODO check if ids are existing
-            VehicleId = vehicleId,
-            CourierId = courierId,
-            PackageIds = packagesId,
+            //TODO get - Warehouse/APP/CommandHandlers
+            //VehicleId = vehicleId,
+            //CourierId = courierId,
+            //PackageIds = packagesId,
             //TODO set vehicle, courier and packages statuses
             //TODO create a route
         };

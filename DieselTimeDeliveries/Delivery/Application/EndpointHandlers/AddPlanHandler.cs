@@ -1,6 +1,6 @@
 ﻿namespace Delivery.Application;
 
-public class CreatePlanHandler
+public class AddPlanHandler
 {
     
 }
