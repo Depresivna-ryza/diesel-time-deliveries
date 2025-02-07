@@ -22,17 +22,14 @@ public class Plan : AggregateRoot<PlanId>
     
     public static ErrorOr<Plan> Create()
     {
-        //TODO get - Warehouse/APP/CommandHandlers OR CONTRACTS/Queries
         var vehicleId = GetAvailableCourierQuery();
         var courierId = GetAvailableCourierQuery();
         var packageIds = GetPackagesForDeliveryQuery(vehicleId);
         
-        //TODO origin set as vehicle location
-        //TODO get destinations from packages
+        var origin = "Sumavska 68/a, 602 00 Brno, Czechia"; //future extension: get current vehicle location
         var route = RoutePackagesCommand(GetAddressesFromPackageIds(packageIds), origin);
         
-        //TODO set vehicle, courier and packages statuses OR CONTRACTS/Queries OR Events
-        DeliveryStartedEvent(VehicleId, CourierId, PackageIds);
+        DeliveryStartedEvent(vehicleId, courierId, packageIds);
         
         return new Plan
         {
@@ -49,7 +46,7 @@ public class Plan : AggregateRoot<PlanId>
 
         foreach (var packageId in packageIds)
         {
-            var package = GetPackageById(packageId); 
+            var package = GetPackageById(packageId); //TODO add Contract/Query
             if (package != null)
             {
                 addresses.Add(package.Address); 
@@ -77,8 +74,7 @@ public class Plan : AggregateRoot<PlanId>
     //TODO annotation
     public Guid? ProceedToNextPackage(bool currPackageDeliverySuccessul)
     {
-        // TODO what to use? UpdatePackageRequest - curr OR CONTRACTS/Events
-        // TODO what to use? UpdatePackageRequest - next at CONTRACTS/Events
+        PackageDeliveredEvent(PackageIds[CurrentPackageIndex], currPackageDeliverySuccessul);
 
         CurrentPackageIndex += 1;
         
