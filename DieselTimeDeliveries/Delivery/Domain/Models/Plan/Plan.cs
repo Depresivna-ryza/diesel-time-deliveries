@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Contracts.Events;
+using Contracts.Queries;
 using SharedKernel;
-using Warehouse.Domain.Models.Courier;
-using Warehouse.Domain.Models.Package;
-using Warehouse.Domain.Models.Vehicle;
 using ErrorOr;
-using Warehouse.Application.EndpointHandlers.Package;
-using Warehouse.Presentation.Package;
+using GoogleApi.Entities.Maps.Routes.Directions.Response;
 
 namespace Delivery.Domain.Models;
 
@@ -26,12 +23,16 @@ public class Plan : AggregateRoot<PlanId>
     {
         return new Plan
         {
-            //TODO get - Warehouse/APP/CommandHandlers
-            //VehicleId = vehicleId,
-            //CourierId = courierId,
-            //PackageIds = packagesId,
-            //TODO set vehicle, courier and packages statuses
-            //TODO create a route
+            //TODO get - Warehouse/APP/CommandHandlers OR CONTRACTS/Queries
+            VehicleId = GetAvailableCourierQuery(),
+            CourierId = GetAvailableCourierQuery(),
+            PackageIds = GetPackagesForDeliveryQuery(VehicleId),
+            //TODO set vehicle, courier and packages statuses OR CONTRACTS/Queries OR Events
+            DeliveryStartedEvent(VehicleId, CourierId, PackageIds);
+            //TODO create a route OR CONTRACTS/Command
+            //TODO origin set as vehicle location
+            //TODO get destinations from packages
+            Route = RoutePackagesCommand(Destinations, origin);
         };
     }
     
@@ -53,14 +54,15 @@ public class Plan : AggregateRoot<PlanId>
     //TODO annotation
     public Guid? ProceedToNextPackage(bool currPackageDeliverySuccessul)
     {
-        // TODO what to use? UpdatePackageRequest - curr
-        // TODO what to use? UpdatePackageRequest - next
+        // TODO what to use? UpdatePackageRequest - curr OR CONTRACTS/Events
+        // TODO what to use? UpdatePackageRequest - next at CONTRACTS/Events
 
         CurrentPackageIndex += 1;
         
         if (CurrentPackageIndex >= PackageIds.Count)
         {
             UpdateStatus(PlanStatusEnum.Delivered);
+            DeliveryEndedEvent(VehicleId, CourierId);
             return null;
         }
 
