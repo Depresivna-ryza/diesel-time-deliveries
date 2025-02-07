@@ -37,6 +37,8 @@ public class updatePackageHandler(IRepository<Domain.Models.Package.Package> rep
             return updateResult.Errors;
         
         var updateedGoods = package;
+        
+        updateedGoods.PackageUpdated();
 
         repository.Update(updateedGoods);
         await repository.CommitAsync();

@@ -24,6 +24,8 @@ public class DeletePackageHandler(
         }
 
         var packageId = PackageId.Create(command.PackageId);
+        
+        package.PackageDeleted();
 
         await repository.RemoveAsync(packageId);
         await repository.CommitAsync();
