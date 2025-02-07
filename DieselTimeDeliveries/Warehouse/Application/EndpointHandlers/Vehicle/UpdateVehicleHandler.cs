@@ -35,6 +35,8 @@ public class UpdateVehicleHandler(IRepository<Domain.Models.Vehicle.Vehicle> rep
         
         var updateedGoods = vehicle;
 
+        vehicle.VehicleUpdated();
+
         repository.Update(updateedGoods);
         await repository.CommitAsync();
         

@@ -25,6 +25,8 @@ public class DeleteVehicleHandler(
 
         var vehicleId = VehicleId.Create(command.VehicleId);
 
+        vehicle.VehicleDeleted();
+        
         await repository.RemoveAsync(vehicleId);
         await repository.CommitAsync();
 
