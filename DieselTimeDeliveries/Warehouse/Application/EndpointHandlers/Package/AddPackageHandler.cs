@@ -1,0 +1,44 @@
+﻿using ErrorOr;
+using Warehouse.Domain.Services;
+
+namespace Warehouse.Application.EndpointHandlers.Package;
+
+public record AddPackageCommand(string Name, decimal Weight, string Destination)
+{
+    public record Result(
+        Guid PackageId,
+        string Name,
+        decimal Weight,
+        string Destination,
+        string Status,
+        DateTime? ProcessedAt,
+        DateTime? PickedForDeliveryAt,
+        DateTime? DeliveredAt,
+        DateTime? DiscardedAt);
+}
+
+public class AddPackageHandler(IRepository<Domain.Models.Package.Package> repository)
+{
+    public async Task<ErrorOr<AddPackageCommand.Result>> HandleAsync(AddPackageCommand command)
+    {
+        var goods = Domain.Models.Package.Package.Create(command.Name, command.Weight, command.Destination);
+
+        if (goods.IsError)
+            return goods.Errors;
+
+        var addedGoods = await repository.InsertAsync(goods.Value);
+
+        await repository.CommitAsync();
+        return new AddPackageCommand.Result(
+            addedGoods.Id.Value,
+            addedGoods.Name,
+            addedGoods.Weight.Value,
+            addedGoods.Destination,
+            addedGoods.Status.ToString(),
+            addedGoods.ProcessedAt,
+            addedGoods.PickedForDeliveryAt,
+            addedGoods.DeliveredAt,
+            addedGoods.DiscardedAt
+        );
+    }
+}

@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using ErrorOr;
 using SharedKernel;
-using ErrorOr;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using Warehouse.Domain.Events;
+using Wolverine.Persistence;
 
 namespace Warehouse.Domain.Models.Package;
 
@@ -12,26 +10,68 @@ public class Package : AggregateRoot<PackageId>
     public Weight Weight { get; private set; }
     public string Destination { get; private set; }
     public PackageStatusEnum Status { get; private set; }
+    
+    public DateTime? ProcessedAt { get; private set; }
+    public DateTime? PickedForDeliveryAt { get; private set; }
+    public DateTime? DeliveredAt { get; private set; }
+    public DateTime? DiscardedAt { get; private set; }
 
     public static ErrorOr<Package> Create(string name, decimal weight, string destination)
     {
         var weightOrError = Weight.Create(weight);
-        if (weightOrError.IsError)
-        {
-            return weightOrError.Errors;
-        }
+        if (weightOrError.IsError) return weightOrError.Errors;
 
-        return new Package {
-            Id = PackageId.CreateUnique(), 
-            Name = name, 
-            Weight = weightOrError.Value, 
-            Destination = destination, 
+        return new Package
+        {
+            Id = PackageId.CreateUnique(),
+            Name = name,
+            Weight = weightOrError.Value,
+            ProcessedAt = DateTime.Now.ToUniversalTime(),
+            Destination = destination,
             Status = PackageStatusEnum.Stored
         };
     }
-
-    public void PackageAdded() //example only
+    
+    public void UpdateStatus(PackageStatusEnum status)
     {
-        RaiseEvent(new PackageDomainEvent(Id.Value));
+        Status = status;
+        
+        switch (Status)
+        {
+            case PackageStatusEnum.Stored:
+                ProcessedAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Inbound:
+                PickedForDeliveryAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Delivered:
+                DeliveredAt = DateTime.Now.ToUniversalTime();
+                break;
+            case PackageStatusEnum.Discarded:
+                DiscardedAt = DateTime.Now.ToUniversalTime();
+                break;
+        }
+    }
+
+    public ErrorOr<Success> Update(string? name, decimal? weight, string? destination, string? status)
+    {
+        Name = name ?? Name;
+        Destination = destination ?? Destination;
+        
+        if (weight.HasValue)
+        {
+            var weightOrError = Weight.Create(weight.Value);
+            if (weightOrError.IsError) return weightOrError.Errors;
+            Weight = weightOrError.Value;
+        }
+        
+        if (status != null)
+        {
+            if (!Enum.TryParse<PackageStatusEnum>(status, true, out var newStatus))
+                return Error.Validation("Invalid status");
+            UpdateStatus(newStatus);
+        }
+        
+        return Result.Success;
     }
 }
