@@ -24,14 +24,14 @@ public class GetAvailablePackageHandler(
         
         var packages = await queryObjectPackage.Filter(p => p.Status == PackageStatusEnum.Stored).ExecuteAsync();
         
-        var availablePackages = new List<Guid>();
+        var availablePackages = new List<GetPackagesForDeliveryQuery.Package>();
         
         var totalWeight = 0m;
         foreach (var package in packages)
         {
             if (totalWeight + package.Weight.Value <= capacity)
             {
-                availablePackages.Add(package.Id.Value);
+                availablePackages.Add(new GetPackagesForDeliveryQuery.Package(package.Id.Value, package.Destination));
                 totalWeight += package.Weight.Value;
             }
         }
