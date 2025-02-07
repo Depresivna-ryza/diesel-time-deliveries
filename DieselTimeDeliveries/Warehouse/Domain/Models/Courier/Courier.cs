@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using SharedKernel;
+using Warehouse.Domain.Events.Courier;
 
 namespace Warehouse.Domain.Models.Courier;
 
@@ -46,8 +47,18 @@ public class Courier : AggregateRoot<CourierId>
         return Result.Success;
     }
 
-    // public void CourierAdded() 
-    // {
-    //     RaiseEvent(new CourierDomainEvent(Id.Value));
-    // }
+    public void CourierAdded()
+    {
+        RaiseEvent(new CourierCreatedDomainEvent{ CourierId = Id.Value });
+    }
+    
+    public void CourierUpdated()
+    {
+        RaiseEvent(new CourierUpdatedDomainEvent{ CourierId = Id.Value });
+    }
+    
+    public void CourierDeleted()
+    {
+        RaiseEvent(new CourierDeletedDomainEvent{ CourierId = Id.Value });
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using SharedKernel;
+using Warehouse.Domain.Events.Vehicle;
 using Warehouse.Domain.Models.Package;
 
 namespace Warehouse.Domain.Models.Vehicle;
@@ -69,8 +70,18 @@ public class Vehicle : AggregateRoot<VehicleId>
         return Result.Success;
     }
 
-    // public void VehicleAdded() 
-    // {
-    //     RaiseEvent(new VehicleDomainEvent(Id.Value));
-    // }
+    public void VehicleAdded()
+    {
+        RaiseEvent(new VehicleCreatedDomainEvent{ VehicleId = Id.Value });
+    }
+    
+    public void VehicleUpdated()
+    {
+        RaiseEvent(new VehicleUpdatedDomainEvent{ VehicleId = Id.Value });
+    }
+    
+    public void VehicleDeleted()
+    {
+        RaiseEvent(new VehicleDeletedDomainEvent{ VehicleId = Id.Value });
+    }
 }
