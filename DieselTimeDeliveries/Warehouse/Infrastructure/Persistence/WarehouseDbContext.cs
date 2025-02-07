@@ -15,8 +15,6 @@ public class WarehouseDbContext : DbContext
     private readonly IMessageBus _sender;
     private readonly IDocumentStore _store;
 
-    // public WarehouseDbContext() {    } ?????????????????
-
     public WarehouseDbContext(DbContextOptions<WarehouseDbContext> options, IMessageBus sender, IDocumentStore store) :
         base(options)
     {
