@@ -25,6 +25,8 @@ public class DeleteCourierHandler(
 
         var courierId = CourierId.Create(command.CourierId);
 
+        courier.CourierDeleted();
+        
         await repository.RemoveAsync(courierId);
         await repository.CommitAsync();
 

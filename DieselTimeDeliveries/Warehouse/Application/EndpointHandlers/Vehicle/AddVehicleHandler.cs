@@ -18,7 +18,8 @@ public class AddVehicleHandler(IRepository<Domain.Models.Vehicle.Vehicle> reposi
             return goods.Errors;
 
         var addedGoods = await repository.InsertAsync(goods.Value);
-        // addedGoods.VehicleAdded();
+
+        addedGoods.VehicleAdded();
 
         await repository.CommitAsync();
         return new AddVehicleCommand.Result(

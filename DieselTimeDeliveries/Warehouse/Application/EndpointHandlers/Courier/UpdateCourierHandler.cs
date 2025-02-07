@@ -28,6 +28,8 @@ public class updateCourierHandler(IRepository<Domain.Models.Courier.Courier> rep
             return updateResult.Errors;
         
         var updateedGoods = courier;
+        
+        courier.CourierUpdated();
 
         repository.Update(updateedGoods);
         await repository.CommitAsync();

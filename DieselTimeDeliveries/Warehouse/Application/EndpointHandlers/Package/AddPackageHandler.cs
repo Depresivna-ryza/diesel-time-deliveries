@@ -21,24 +21,26 @@ public class AddPackageHandler(IRepository<Domain.Models.Package.Package> reposi
 {
     public async Task<ErrorOr<AddPackageCommand.Result>> HandleAsync(AddPackageCommand command)
     {
-        var goods = Domain.Models.Package.Package.Create(command.Name, command.Weight, command.Destination);
+        var package = Domain.Models.Package.Package.Create(command.Name, command.Weight, command.Destination);
 
-        if (goods.IsError)
-            return goods.Errors;
+        if (package.IsError)
+            return package.Errors;
 
-        var addedGoods = await repository.InsertAsync(goods.Value);
+        var addedPackage = await repository.InsertAsync(package.Value);
+        
+        addedPackage.PackageAdded();
 
         await repository.CommitAsync();
         return new AddPackageCommand.Result(
-            addedGoods.Id.Value,
-            addedGoods.Name,
-            addedGoods.Weight.Value,
-            addedGoods.Destination,
-            addedGoods.Status.ToString(),
-            addedGoods.ProcessedAt,
-            addedGoods.PickedForDeliveryAt,
-            addedGoods.DeliveredAt,
-            addedGoods.DiscardedAt
+            addedPackage.Id.Value,
+            addedPackage.Name,
+            addedPackage.Weight.Value,
+            addedPackage.Destination,
+            addedPackage.Status.ToString(),
+            addedPackage.ProcessedAt,
+            addedPackage.PickedForDeliveryAt,
+            addedPackage.DeliveredAt,
+            addedPackage.DiscardedAt
         );
     }
 }

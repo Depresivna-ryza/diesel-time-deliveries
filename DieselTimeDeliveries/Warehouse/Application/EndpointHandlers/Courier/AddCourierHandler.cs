@@ -19,7 +19,7 @@ public class AddCourierHandler(IRepository<Domain.Models.Courier.Courier> reposi
 
         var addedGoods = await repository.InsertAsync(goods.Value);
 
-        // addedGoods.CourierAdded();
+        addedGoods.CourierAdded();
 
         await repository.CommitAsync();
         return new AddCourierCommand.Result(
