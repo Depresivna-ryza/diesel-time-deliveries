@@ -1,4 +1,5 @@
-﻿using Contracts.Events;
+﻿using Contracts.Commands;
+using Contracts.Events;
 using Contracts.Queries;
 using SharedKernel;
 using ErrorOr;
@@ -13,7 +14,7 @@ public class Plan : AggregateRoot<PlanId>
     public Guid VehicleId { get; private set; }
     public Guid CourierId { get; private set; }
     public List<Guid> PackageIds { get; private set; }
-    public int CurrentPackageIndex { get; private set; } = 0;
+    public int CurrentPackageIndex { get; private set; } = -1;
     public Route Route { get; private set; }
     public PlanStatusEnum Status { get; private set; } = PlanStatusEnum.Created;
     public DateTime? StartedAt { get; private set; }
@@ -21,19 +22,41 @@ public class Plan : AggregateRoot<PlanId>
     
     public static ErrorOr<Plan> Create()
     {
+        //TODO get - Warehouse/APP/CommandHandlers OR CONTRACTS/Queries
+        var vehicleId = GetAvailableCourierQuery();
+        var courierId = GetAvailableCourierQuery();
+        var packageIds = GetPackagesForDeliveryQuery(vehicleId);
+        
+        //TODO origin set as vehicle location
+        //TODO get destinations from packages
+        var route = RoutePackagesCommand(GetAddressesFromPackageIds(packageIds), origin);
+        
+        //TODO set vehicle, courier and packages statuses OR CONTRACTS/Queries OR Events
+        DeliveryStartedEvent(VehicleId, CourierId, PackageIds);
+        
         return new Plan
         {
-            //TODO get - Warehouse/APP/CommandHandlers OR CONTRACTS/Queries
-            VehicleId = GetAvailableCourierQuery(),
-            CourierId = GetAvailableCourierQuery(),
-            PackageIds = GetPackagesForDeliveryQuery(VehicleId),
-            //TODO set vehicle, courier and packages statuses OR CONTRACTS/Queries OR Events
-            DeliveryStartedEvent(VehicleId, CourierId, PackageIds);
-            //TODO create a route OR CONTRACTS/Command
-            //TODO origin set as vehicle location
-            //TODO get destinations from packages
-            Route = RoutePackagesCommand(Destinations, origin);
+            VehicleId = vehicleId,
+            CourierId = courierId,
+            PackageIds = packageIds,
+            Route = route
         };
+    }
+    
+    public static List<string> GetAddressesFromPackageIds(List<Guid> packageIds)
+    {
+        var addresses = new List<string>();
+
+        foreach (var packageId in packageIds)
+        {
+            var package = GetPackageById(packageId); 
+            if (package != null)
+            {
+                addresses.Add(package.Address); 
+            }
+        }
+
+        return addresses;
     }
     
     public void UpdateStatus(PlanStatusEnum status)
@@ -75,7 +98,7 @@ public class Plan : AggregateRoot<PlanId>
         List<Guid>? packageIds,
         string? status)
     {
-        // TODO check if ids are existing
+        // Future extension: check if ids are existing
        VehicleId = vehicleId ?? VehicleId;
        CourierId = courierId ?? CourierId;
        PackageIds = packageIds ?? PackageIds;

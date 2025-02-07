@@ -1,3 +1,4 @@
+using Delivery;
 using DieselTimeDeliveries;
 using DieselTimeDeliveries.ServiceDefaults;
 using Marten;
@@ -58,6 +59,7 @@ var dbConnectionString = builder.Configuration.GetConnectionString(EnvConstants.
 Console.WriteLine(dbConnectionString);
 Console.WriteLine("--------------------------");
 builder.Services.WarehouseInstall(dbConnectionString);
+builder.Services.DeliveryInstall(dbConnectionString);
 
 var googleApiKey = builder.Configuration.GetConnectionString(EnvConstants.GoogleApiKey) ?? throw new Exception("Invalid google api key");
 builder.Services.RoutingInstall(googleApiKey);
